@@ -1,0 +1,158 @@
+/*
+MIT License
+
+Copyright (c) 2017 Nimble Learn Ltd (http://www.nimblelearn.com)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+//Transform a Data Package resource (specified by name or index) into a table and use the JSON Table Schema to apply the correct data types. If a resource name or index is not provided, return a table that lists all of the Data Package's resources.
+(
+  path as text, 
+  optional resource_index as number,       //A resource will always have an index
+  optional resource_name as text,          //A resource may have a name
+  optional ignore_schema_types as logical //For scenarios when applying the field types from the schema causes load issues
+) as table =>
+let       
+    //Ensure ignore_schema_types has a true/false value
+    ignore_schema_types = if ignore_schema_types = null then
+                      false
+                    else
+                      ignore_schema_types,
+
+    //The data package spec states that the descriptor file MUST be named datapackage.json
+    descriptor = "datapackage.json",
+    
+    //Add a trailing slash to the base path if it doesn't already exist
+    base_path = Text.Replace(
+                  if Text.Contains(path, "http")
+                  then (if Text.End(path, 1) <> "/" and Text.Contains(path, "datapackage.json") = false then path & "/" else path)
+                  else (if Text.End(path, 1) <> "\" and Text.Contains(path, "datapackage.json") = false then path & "\" else path),
+                  "datapackage.json", 
+                  ""
+                ),
+    
+    //Build the fully qualified path of the datapackage.json descriptor file
+    descriptor_path = base_path & descriptor,
+    
+    //Deserialise the Data Package metatdata
+    data_package = if Text.Contains("http", base_path) then
+                     Json.Document(File.Contents(descriptor_path))
+                   else 
+                     Json.Document(Web.Contents(descriptor_path)),                
+    
+    //Convert the list of resource records into a table and then expand the record columns
+    all_resources_as_list = data_package[resources],
+    all_resources_as_table = Table.FromList(all_resources_as_list, Splitter.SplitByNothing(), null, null, ExtraValues.Error),
+    all_resources = Table.ExpandRecordColumn(all_resources_as_table, "Column1", {"name", "path", "schema"}, {"name", "path", "schema"}),
+    all_resources_with_added_index = Table.AddIndexColumn(all_resources, "index", 0, 1),
+    all_resources_with_added_data = Table.AddColumn(all_resources_with_added_index, "data", each GetTableFromDataPackage(path, _[index], null, ignore_schema_types)),
+    all_resources_with_added_data_buffered = Table.Buffer(all_resources_with_added_data),
+    
+    //Select the required resource based on name or index
+    selected_resource = Table.SelectRows(all_resources_with_added_index, each (([name] = resource_name and resource_index = null) or ([index] = resource_index and resource_name = null))),
+
+    //Build the fully qualified resource path. If the resource path is not a fully qualified URL then it's treated as a relative path.
+    resource_path = if Text.Contains(selected_resource[path]{0}, "http") then 
+                      selected_resource[path]{0}
+                    else 
+                      base_path & Text.From(selected_resource[path]{0}),
+    
+    //Extract the schema metadata
+    all_fields_as_list = Table.ExpandRecordColumn(selected_resource, "schema", {"fields"}, {"fields"}),
+    expanded_fields = Table.ExpandListColumn(all_fields_as_list, "fields"),
+    expanded_field_rows = Table.ExpandRecordColumn(expanded_fields, "fields", {"name", "type"}, {"field_name", "field_type"}),
+    
+    field_count = List.Count(expanded_field_rows[field_name]),
+    field_names = expanded_field_rows[field_name], 
+    field_types = expanded_field_rows[field_type],
+    
+    //Map the JSON Table Schema field types to M data types
+    m_field_types = List.Transform(field_types, each MapDataPackageFieldType(_)),
+    
+    //Create a list combining the field names mapped to M data types
+    field_names_and_types = List.Zip({field_names, field_types, m_field_types}),
+
+    //Loop through the list of field type mappings and generate a text list of type transformations
+    type_transformations_as_list_of_text = List.Generate(
+                                            ()=>[list_items = field_names_and_types, item_index = 0],
+                                            each [item_index] < field_count,
+                                            each [list_items=[list_items], item_index = [item_index] + 1],
+                                            each "{""" & [list_items]{[item_index]}{0} & """, type " & [list_items]{[item_index]}{2} & "}"
+                                          ),
+    //Loop through the list of field type mappings and generate a text list of value transformations
+    value_transformations_as_list_of_text = List.Generate(
+                                            ()=>[list_items = field_names_and_types, item_index = 0],
+                                            each [item_index] < field_count,
+                                            each [list_items=[list_items], item_index = [item_index] + 1],
+                                            each "{""" & [list_items]{[item_index]}{0} & """, each TransformDataPackageFieldValue(""" & [list_items]{[item_index]}{1} & """, _)}"
+                                          ),    
+    
+    //Prepare the the list of text for conversion into a list of lists
+    type_transformations_as_text = "{" & Text.Combine(type_transformations_as_list_of_text, ", ") & "}",
+    value_transformation_as_text = "{" & Text.Combine(value_transformations_as_list_of_text, ", ") & "}",
+ 
+    //Evaluate the generated expression to create the list of lists to be used for column type transformations
+    type_transformations = Expression.Evaluate(type_transformations_as_text),
+
+    //Explicitly exposed the TransformDataPackageFieldValue function to the Expression.Evaluate context
+    value_transformations = Expression.Evaluate(value_transformation_as_text, [TransformDataPackageFieldValue=TransformDataPackageFieldValue]),
+    
+    //Load the resource
+    untyped_resource_data = Csv.Document(Web.Contents(resource_path),[Delimiter=",", Columns=field_count, Encoding=1252]),
+
+    //Promote the first row to the header
+    untyped_resource_data_with_promoted_header = Table.PromoteHeaders(untyped_resource_data),  
+
+    //Create a list mapping the header column names (old) with the ones from the schema fields (new)
+    old_and_new_column_names = List.Zip({Table.ColumnNames(untyped_resource_data_with_promoted_header), field_names}),
+
+    //Loop through the list of lists and generate a text list of old and new column namnes
+    old_and_new_column_names_as_list_of_text = List.Generate(
+                                                 ()=>[list_items = old_and_new_column_names, item_index = 0],
+                                                 each [item_index] < field_count,
+                                                 each [list_items=[list_items], item_index = [item_index] + 1],
+                                                 each "{""" & [list_items]{[item_index]}{0} & """, """ & [list_items]{[item_index]}{1} & """}"
+                                               ),
+
+    //Prepare the the list of text for conversion into a list of lists
+    renamed_columns_list_as_text  = "{" & Text.Combine( old_and_new_column_names_as_list_of_text, ", ") & "}",
+    
+    //Evaluate the generated expression to create the list of lists to be used for renaming the columns
+    renamed_columns = Expression.Evaluate(renamed_columns_list_as_text),    
+ 
+    //Apply the column names taken from the schema
+    untyped_resource_data_with_renamed_columns = Table.RenameColumns(untyped_resource_data_with_promoted_header, renamed_columns),
+
+    //Make the field values M data type compatible
+    conformed_resource_data = Table.TransformColumns(untyped_resource_data_with_renamed_columns, value_transformations),
+
+    //Apply the M data types to the columns
+    typed_resource_data = Table.TransformColumnTypes(conformed_resource_data, type_transformations),
+
+    output_table = if resource_name = null and resource_index = null then
+                     all_resources_with_added_data_buffered
+                   else 
+                     //Determine whether to apply the JSON Table Schema or return all columns as text
+                     if ignore_schema_types = false then
+                       typed_resource_data
+                     else
+                       untyped_resource_data_with_renamed_columns                       
+in
+    output_table

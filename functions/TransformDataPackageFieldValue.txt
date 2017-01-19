@@ -1,0 +1,67 @@
+/*
+MIT License
+
+Copyright (c) 2017 Nimble Learn Ltd (http://www.nimblelearn.com)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+//Attempt to coerce JSON Table Schema field type values into appropriate M type values
+(
+  field_type as text,
+  field_value as any
+) as any =>
+let 
+  input_value = Text.From(field_value),
+  output_value = if field_type = "string" 
+                  then input_value 
+                else if field_type = "number" then 
+                  Number.From(input_value)
+                else if field_type = "integer" then 
+                  Number.From(input_value)
+                else if field_type = "boolean" then 
+                  if Text.Lower(input_value) = "yes"
+                    or Text.Lower(input_value) = "y"
+                    or Text.Lower(input_value) = "true"
+                    or Text.Lower(input_value) = "t"
+                    or Text.Lower(input_value) = "1"
+                  then 
+                    true
+                  else if Text.Lower(input_value) = "no"
+                    or Text.Lower(input_value) = "n"
+                    or Text.Lower(input_value) = "false"
+                    or Text.Lower(input_value) = "f"
+                    or Text.Lower(input_value) = "0"
+                  then 
+                    false
+                  else input_value 
+                else if field_type = "object" 
+                  or field_type = "array" 
+                then 
+                  Json.Document(input_value) 
+                else if field_type = "date" then 
+                  Date.From(input_value)  
+                else if field_type = "datetime" then 
+                  DateTime.From(input_value)
+                else if field_type = "time" then 
+                  Time.From(input_value)
+                //Any field types that are not handled yet
+                else input_value
+in
+  output_value
