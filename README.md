@@ -57,7 +57,7 @@ You can invoke the `GetTableFromDataPackage` function through the Power BI Deskt
 * Power BI Desktop example file - [datapackage-m-example.pbix](./examples/datapackage-m-example.pbix)
 * Excel workbook example file - [datapackage-m-example.xlsx](./examples/datapackage-m-example.xlsx)
 
-This section focuses on how to invokie the `GetTableFromDataPackage` function directly through M code in the Advanced Editor.
+This section focuses on how to invoke the `GetTableFromDataPackage` function directly through M code in the Advanced Editor.
 
 ### Getting the list of resources from a Data Package (remote)
 
