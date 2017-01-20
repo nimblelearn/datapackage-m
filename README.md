@@ -1,14 +1,17 @@
-# Power BI and Power Query Tabular Data Package functions
+# Tabular Data Package functions for Power BI and Power Query
 
 A set of functions written in [M](https://msdn.microsoft.com/en-us/library/mt211003.aspx?f=255&MSPPError=-2147217396) for working with [Tabular Data Packages](http://specs.frictionlessdata.io/tabular-data-package/) in Power BI Desktop and Power Query (also known as 'Get & Transform') in Excel.
 
-![Microsoft Power BI UI: Invoke Function](./images/datapackage-m-power-bi-ui-invoke-function.PNG)
-
 The functions were written to reduce the time and effort required to convert Tabular Data Package resources into Power BI or Power Query (Excel 2010 onwards) tables with correctly typed columns. The main function, `GetTableFromDataPackage`, can extract tables from either remote or local Data Packages and dynamically apply the [JSON Table Schema](http://specs.frictionlessdata.io/json-table-schema/) metadata (i.e. field names and field types) when creating a table. It also allows you to enumerate a Data Package's resources and quickly peek at or click through to the typed data.
 
-![Microsoft Power BI UI: Resource Naviagtion](./images/datapackage-m-power-bi-ui-resource-navigation.PNG)
+![Microsoft Power BI UI: Invoke Function](./images/datapackage-m-power-bi-ui-invoke-function.PNG)  
+*Invoking the `GetTableFromDataPackage` function*
 
-![Microsoft Power BI UI: GDP Data Package Resource Data](./images/datapackage-m-power-bi-ui-gdp-data.PNG)
+![Microsoft Power BI UI: Resource Naviagtion](./images/datapackage-m-power-bi-ui-resource-navigation.PNG)  
+*Viewing the resources for a Data Package and previewing the resource data*  
+
+![Microsoft Power BI UI: GDP Data Package Resource Data](./images/datapackage-m-power-bi-ui-gdp-data.PNG)  
+*Pulling the data from a GDP Data Package resource after navigating from the resource list*
 
 ## JSON Table Schema field types to M types
 
@@ -113,7 +116,7 @@ in
     Source
 ```
 
-### Ignoring the JSON Table Schema field types - useful for getting around data type conversion errors
+### Ignoring the JSON Table Schema field types to get around field type conversion errors
 
 ```text
 let
@@ -134,7 +137,7 @@ This work was created by [Nimble Learn](http://www.nimblelearn.com) and has been
 
 * When working with remote Data Packages located in GitHub, ensure that you are using the URL for the raw file e.g. [https://raw.githubusercontent.com/datasets/gdp/master/datapackage.json](https://raw.githubusercontent.com/datasets/gdp/master/datapackage.json) instead of [https://github.com/datasets/gdp/blob/master/datapackage.json](https://github.com/datasets/gdp/blob/master/datapackage.json) where the latter will give an error.
 
-* The function should work with the modern 'Get Data' experience in SQL Server vNext (CTP 1.1 or later) but this is untested.
+* The functions can be adapted to work with the modern 'Get Data' experience in SQL Server vNext (CTP 1.1 or later) but this scenario is untested.
 
 ## Known issues
 

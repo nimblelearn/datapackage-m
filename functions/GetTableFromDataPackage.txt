@@ -27,23 +27,30 @@ SOFTWARE.
   path as text, 
   optional resource_index as number,       //A resource will always have an index
   optional resource_name as text,          //A resource may have a name
-  optional ignore_schema_types as logical //For scenarios when applying the field types from the schema causes load issues
+  optional ignore_schema_types as logical  //For scenarios when applying the field types from the schema causes load issues
 ) as table =>
 let       
     //Ensure ignore_schema_types has a true/false value
     ignore_schema_types = if ignore_schema_types = null then
-                      false
-                    else
-                      ignore_schema_types,
+                            false
+                          else
+                            ignore_schema_types,
 
     //The data package spec states that the descriptor file MUST be named datapackage.json
     descriptor = "datapackage.json",
     
+    //Determine if the Data Package is local or remote
+    data_package_location_type = if Text.Contains(base_path, "http") then
+                                   "remote"
+                                 else
+                                   "local",
+
     //Add a trailing slash to the base path if it doesn't already exist
     base_path = Text.Replace(
-                  if Text.Contains(path, "http")
-                  then (if Text.End(path, 1) <> "/" and Text.Contains(path, "datapackage.json") = false then path & "/" else path)
-                  else (if Text.End(path, 1) <> "\" and Text.Contains(path, "datapackage.json") = false then path & "\" else path),
+                  if Text.Contains(path, "http") then 
+                    (if Text.End(path, 1) <> "/" and Text.Contains(path, "datapackage.json") = false then path & "/" else path)
+                  else 
+                    (if Text.End(path, 1) <> "\" and Text.Contains(path, "datapackage.json") = false then path & "\" else path),
                   "datapackage.json", 
                   ""
                 ),
@@ -52,10 +59,10 @@ let
     descriptor_path = base_path & descriptor,
     
     //Deserialise the Data Package metatdata
-    data_package = if Text.Contains("http", base_path) then
-                     Json.Document(File.Contents(descriptor_path))
-                   else 
-                     Json.Document(Web.Contents(descriptor_path)),                
+    data_package = if data_package_location_type = "remote" then
+                     Json.Document(Web.Contents(descriptor_path))
+                   else                      
+                     Json.Document(File.Contents(descriptor_path)),                
     
     //Convert the list of resource records into a table and then expand the record columns
     all_resources_as_list = data_package[resources],
@@ -67,12 +74,13 @@ let
     
     //Select the required resource based on name or index
     selected_resource = Table.SelectRows(all_resources_with_added_index, each (([name] = resource_name and resource_index = null) or ([index] = resource_index and resource_name = null))),
-
+    selected_resource_path = selected_resource[path]{0},
+    
     //Build the fully qualified resource path. If the resource path is not a fully qualified URL then it's treated as a relative path.
-    resource_path = if Text.Contains(selected_resource[path]{0}, "http") then 
-                      selected_resource[path]{0}
+    resource_path = if Text.Contains(selected_resource_path, "http") then 
+                      selected_resource_path
                     else 
-                      base_path & Text.From(selected_resource[path]{0}),
+                      base_path & Text.From(selected_resource_path),
     
     //Extract the schema metadata
     all_fields_as_list = Table.ExpandRecordColumn(selected_resource, "schema", {"fields"}, {"fields"}),
@@ -115,7 +123,12 @@ let
     value_transformations = Expression.Evaluate(value_transformation_as_text, [TransformDataPackageFieldValue=TransformDataPackageFieldValue]),
     
     //Load the resource
-    untyped_resource_data = Csv.Document(Web.Contents(resource_path),[Delimiter=",", Columns=field_count, Encoding=1252]),
+    untyped_resource_data = if Text.Contains(selected_resource_path, "http") = true or (data_package_location_type = "remote" and Text.Contains(selected_resource_path, "http") = false) then
+                              //This is a fully qualified URL or a fully qualified URL was derived from the base_path and relative path
+                              Csv.Document(Web.Contents(resource_path),[Delimiter=",", Columns=field_count, Encoding=1252])
+                            else
+                              //This is a local resource
+                              Csv.Document(File.Contents(resource_path),[Delimiter=",", Columns=field_count, Encoding=1252]),
 
     //Promote the first row to the header
     untyped_resource_data_with_promoted_header = Table.PromoteHeaders(untyped_resource_data),  
