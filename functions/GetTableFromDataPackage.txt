@@ -125,10 +125,10 @@ let
     //Load the resource
     untyped_resource_data = if Text.Contains(selected_resource_path, "http") = true or (data_package_location_type = "remote" and Text.Contains(selected_resource_path, "http") = false) then
                               //This is a fully qualified URL or a fully qualified URL was derived from the base_path and relative path
-                              Csv.Document(Web.Contents(resource_path),[Delimiter=",", Columns=field_count, Encoding=1252])
+                              Csv.Document(Web.Contents(resource_path),[Delimiter=",", Columns=field_count, Encoding=65001])
                             else
                               //This is a local resource
-                              Csv.Document(File.Contents(resource_path),[Delimiter=",", Columns=field_count, Encoding=1252]),
+                              Csv.Document(File.Contents(resource_path),[Delimiter=",", Columns=field_count, Encoding=65001]),
 
     //Promote the first row to the header
     untyped_resource_data_with_promoted_header = Table.PromoteHeaders(untyped_resource_data),  
