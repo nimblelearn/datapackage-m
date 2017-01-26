@@ -24,44 +24,44 @@ SOFTWARE.
 
 //Attempt to coerce JSON Table Schema field type values into appropriate M type values
 (
-  field_type as text,
-  field_value as any
+  FieldType as text,
+  FieldValue as any
 ) as any =>
 let 
-  input_value = Text.From(field_value),
-  output_value = if field_type = "string" 
-                  then input_value 
-                else if field_type = "number" then 
-                  Number.From(input_value)
-                else if field_type = "integer" then 
-                  Number.From(input_value)
-                else if field_type = "boolean" then 
-                  if Text.Lower(input_value) = "yes"
-                    or Text.Lower(input_value) = "y"
-                    or Text.Lower(input_value) = "true"
-                    or Text.Lower(input_value) = "t"
-                    or Text.Lower(input_value) = "1"
+  InputValue = Text.From(FieldValue),
+  OutputValue = if FieldType = "string" 
+                  then InputValue 
+                else if FieldType = "number" then 
+                  Number.From(InputValue)
+                else if FieldType = "integer" then 
+                  Number.From(InputValue)
+                else if FieldType = "boolean" then 
+                  if Text.Lower(InputValue) = "yes"
+                    or Text.Lower(InputValue) = "y"
+                    or Text.Lower(InputValue) = "true"
+                    or Text.Lower(InputValue) = "t"
+                    or Text.Lower(InputValue) = "1"
                   then 
                     true
-                  else if Text.Lower(input_value) = "no"
-                    or Text.Lower(input_value) = "n"
-                    or Text.Lower(input_value) = "false"
-                    or Text.Lower(input_value) = "f"
-                    or Text.Lower(input_value) = "0"
+                  else if Text.Lower(InputValue) = "no"
+                    or Text.Lower(InputValue) = "n"
+                    or Text.Lower(InputValue) = "false"
+                    or Text.Lower(InputValue) = "f"
+                    or Text.Lower(InputValue) = "0"
                   then 
                     false
-                  else input_value 
-                else if field_type = "object" 
-                  or field_type = "array" 
+                  else InputValue 
+                else if FieldType = "object" 
+                  or FieldType = "array" 
                 then 
-                  Json.Document(input_value) 
-                else if field_type = "date" then 
-                  Date.From(input_value)  
-                else if field_type = "datetime" then 
-                  DateTime.From(input_value)
-                else if field_type = "time" then 
-                  Time.From(input_value)
+                  Json.Document(InputValue) 
+                else if FieldType = "date" then 
+                  Date.From(InputValue)  
+                else if FieldType = "datetime" then 
+                  DateTime.From(InputValue)
+                else if FieldType = "time" then 
+                  Time.From(InputValue)
                 //Any field types that are not handled yet
-                else input_value
+                else InputValue
 in
-  output_value
+  OutputValue

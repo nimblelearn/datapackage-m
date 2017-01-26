@@ -10,8 +10,11 @@ The functions were written to reduce the time and effort required to convert Tab
 ![Microsoft Power BI UI: Resource Naviagtion](./images/datapackage-m-power-bi-ui-resource-navigation.PNG)  
 *Viewing the resources for a Data Package and previewing the resource data*  
 
-![Microsoft Power BI UI: GDP Data Package Resource Data](./images/datapackage-m-power-bi-ui-gdp-data.PNG)  
+![Microsoft Power BI UI: GDP Tabular Data Package Resource Data](./images/datapackage-m-power-bi-ui-gdp-data.PNG)  
 *Pulling the data from a GDP Data Package resource after navigating from the resource list*
+
+![Microsoft Power BI UI: GDP Tabular Data Package Visualisation](./images/datapackage-m-power-bi-ui-quick-gdp-visualisation.PNG)  
+*Creating a quick visualisation of the GDP data*
 
 ## JSON Table Schema field types to M types
 

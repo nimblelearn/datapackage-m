@@ -24,20 +24,20 @@ SOFTWARE.
 
 //Map JSON Table Schema field types to equivalent M types
 (
-  input_type as text
+  InputType as text
 ) as text =>
 let
-  output_type = if input_type = "string" then "text" 
-               else if input_type = "number"
-                 or input_type = "date"
-                 or input_type = "datetime" 
-                 or input_type = "time"
+  OutputType = if InputType = "string" then "text" 
+               else if InputType = "number"
+                 or InputType = "date"
+                 or InputType = "datetime" 
+                 or InputType = "time"
                then 
-                 input_type 
-               else if input_type = "integer" then
+                 InputType 
+               else if InputType = "integer" then
                  "number"
-               else if input_type = "boolean" then
+               else if InputType = "boolean" then
                  "logical"
                else "text"
 in 
-  output_type
+  OutputType

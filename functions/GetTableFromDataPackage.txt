@@ -24,148 +24,151 @@ SOFTWARE.
 
 //Transform a Data Package resource (specified by name or index) into a table and use the JSON Table Schema to apply the correct data types. If a resource name or index is not provided, return a table that lists all of the Data Package's resources.
 (
-  path as text, 
-  optional resource_index as number,       //A resource will always have an index
-  optional resource_name as text,          //A resource may have a name
-  optional ignore_schema_types as logical  //For scenarios when applying the field types from the schema causes load issues
+  Path as text, 
+  optional ResourceIndex as number,       //A resource will always have an index
+  optional ResourceName as text,          //A resource may have a name
+  optional IgnoreSchemaTypes as logical  //For scenarios when applying the field types from the schema causes load issues
 ) as table =>
 let       
-    //Ensure ignore_schema_types has a true/false value
-    ignore_schema_types = if ignore_schema_types = null then
+    //Ensure IgnoreSchemaTypes has a true/false value
+    IgnoreSchemaTypes = if IgnoreSchemaTypes = null then
                             false
                           else
-                            ignore_schema_types,
+                            IgnoreSchemaTypes,
 
     //The data package spec states that the descriptor file MUST be named datapackage.json
     descriptor = "datapackage.json",
     
     //Determine if the Data Package is local or remote
-    data_package_location_type = if Text.Contains(base_path, "http") then
+    DataPackageLocationType = if Text.Contains(BasePath, "http") then
                                    "remote"
                                  else
                                    "local",
 
     //Add a trailing slash to the base path if it doesn't already exist
-    base_path = Text.Replace(
-                  if Text.Contains(path, "http") then 
-                    (if Text.End(path, 1) <> "/" and Text.Contains(path, "datapackage.json") = false then path & "/" else path)
+    BasePath = Text.Replace(
+                  if Text.Contains(Path, "http") then 
+                    (if Text.End(Path, 1) <> "/" and Text.Contains(Path, "datapackage.json") = false then Path & "/" else Path)
                   else 
-                    (if Text.End(path, 1) <> "\" and Text.Contains(path, "datapackage.json") = false then path & "\" else path),
+                    (if Text.End(Path, 1) <> "\" and Text.Contains(Path, "datapackage.json") = false then Path & "\" else Path),
                   "datapackage.json", 
                   ""
                 ),
     
     //Build the fully qualified path of the datapackage.json descriptor file
-    descriptor_path = base_path & descriptor,
+    DescriptorPath = BasePath & descriptor,
     
     //Deserialise the Data Package metatdata
-    data_package = if data_package_location_type = "remote" then
-                     Json.Document(Web.Contents(descriptor_path))
+    DataPackage = if DataPackageLocationType = "remote" then
+                     Json.Document(Web.Contents(DescriptorPath))
                    else                      
-                     Json.Document(File.Contents(descriptor_path)),                
+                     Json.Document(File.Contents(DescriptorPath)),                
     
     //Convert the list of resource records into a table and then expand the record columns
-    all_resources_as_list = data_package[resources],
-    all_resources_as_table = Table.FromList(all_resources_as_list, Splitter.SplitByNothing(), null, null, ExtraValues.Error),
-    all_resources = Table.ExpandRecordColumn(all_resources_as_table, "Column1", {"name", "path", "schema"}, {"name", "path", "schema"}),
-    all_resources_with_added_index = Table.AddIndexColumn(all_resources, "index", 0, 1),
-    all_resources_with_added_data = Table.AddColumn(all_resources_with_added_index, "data", each GetTableFromDataPackage(path, _[index], null, ignore_schema_types)),
-    all_resources_with_added_data_buffered = Table.Buffer(all_resources_with_added_data),
+    AllResourcesAsList = DataPackage[resources],
+    AllResourcesAsTable = Table.FromList(AllResourcesAsList, Splitter.SplitByNothing(), null, null, ExtraValues.Error),
+    AllResources = Table.ExpandRecordColumn(AllResourcesAsTable, "Column1", {"name", "path", "schema"}, {"name", "path", "schema"}),
+    AllResourcesWithAddedIndex = Table.AddIndexColumn(AllResources, "index", 0, 1),
+    AllResourcesWithAddedData = Table.AddColumn(AllResourcesWithAddedIndex, "data", each if Text.Contains(_[path], ".csv") then
+                                                                                                   GetTableFromDataPackage(Path, _[index], null, IgnoreSchemaTypes)
+                                                                                                 else 
+                                                                                                   null),
+    AllResourcesWithAddedDataBuffered = Table.Buffer(AllResourcesWithAddedData),
     
     //Select the required resource based on name or index
-    selected_resource = Table.SelectRows(all_resources_with_added_index, each (([name] = resource_name and resource_index = null) or ([index] = resource_index and resource_name = null))),
-    selected_resource_path = selected_resource[path]{0},
+    SelectedResource = Table.SelectRows(AllResourcesWithAddedIndex, each (([name] = ResourceName and ResourceIndex = null) or ([index] = ResourceIndex and ResourceName = null))),
+    SelectedResourcePath = SelectedResource[path]{0},
     
     //Build the fully qualified resource path. If the resource path is not a fully qualified URL then it's treated as a relative path.
-    resource_path = if Text.Contains(selected_resource_path, "http") then 
-                      selected_resource_path
+    ResourcePath = if Text.Contains(SelectedResourcePath, "http") then 
+                      SelectedResourcePath
                     else 
-                      base_path & Text.From(selected_resource_path),
+                      BasePath & Text.From(SelectedResourcePath),
     
     //Extract the schema metadata
-    all_fields_as_list = Table.ExpandRecordColumn(selected_resource, "schema", {"fields"}, {"fields"}),
-    expanded_fields = Table.ExpandListColumn(all_fields_as_list, "fields"),
-    expanded_field_rows = Table.ExpandRecordColumn(expanded_fields, "fields", {"name", "type"}, {"field_name", "field_type"}),
+    AllFieldsAsList = Table.ExpandRecordColumn(SelectedResource, "schema", {"fields"}, {"fields"}),
+    ExpandedFields = Table.ExpandListColumn(AllFieldsAsList, "fields"),
+    ExpandedFieldRows = Table.ExpandRecordColumn(ExpandedFields, "fields", {"name", "type"}, {"field_name", "field_type"}),
     
-    field_count = List.Count(expanded_field_rows[field_name]),
-    field_names = expanded_field_rows[field_name], 
-    field_types = expanded_field_rows[field_type],
+    FieldCount = List.Count(ExpandedFieldRows[field_name]),
+    FieldNames = ExpandedFieldRows[field_name], 
+    FieldTypes = ExpandedFieldRows[field_type],
     
     //Map the JSON Table Schema field types to M data types
-    m_field_types = List.Transform(field_types, each MapDataPackageFieldType(_)),
+    MFieldTypes = List.Transform(FieldTypes, each MapDataPackageFieldType(_)),
     
     //Create a list combining the field names mapped to M data types
-    field_names_and_types = List.Zip({field_names, field_types, m_field_types}),
+    FieldNamesAndTypes = List.Zip({FieldNames, FieldTypes, MFieldTypes}),
 
     //Loop through the list of field type mappings and generate a text list of type transformations
-    type_transformations_as_list_of_text = List.Generate(
-                                            ()=>[list_items = field_names_and_types, item_index = 0],
-                                            each [item_index] < field_count,
-                                            each [list_items=[list_items], item_index = [item_index] + 1],
-                                            each "{""" & [list_items]{[item_index]}{0} & """, type " & [list_items]{[item_index]}{2} & "}"
+    TypeTransformationsAsListOfText = List.Generate(
+                                            ()=>[ListItems = FieldNamesAndTypes, ItemIndex = 0],
+                                            each [ItemIndex] < FieldCount,
+                                            each [ListItems=[ListItems], ItemIndex = [ItemIndex] + 1],
+                                            each "{""" & [ListItems]{[ItemIndex]}{0} & """, type " & [ListItems]{[ItemIndex]}{2} & "}"
                                           ),
     //Loop through the list of field type mappings and generate a text list of value transformations
-    value_transformations_as_list_of_text = List.Generate(
-                                            ()=>[list_items = field_names_and_types, item_index = 0],
-                                            each [item_index] < field_count,
-                                            each [list_items=[list_items], item_index = [item_index] + 1],
-                                            each "{""" & [list_items]{[item_index]}{0} & """, each TransformDataPackageFieldValue(""" & [list_items]{[item_index]}{1} & """, _)}"
+    ValueTransformationsAsListOfText = List.Generate(
+                                            ()=>[ListItems = FieldNamesAndTypes, ItemIndex = 0],
+                                            each [ItemIndex] < FieldCount,
+                                            each [ListItems=[ListItems], ItemIndex = [ItemIndex] + 1],
+                                            each "{""" & [ListItems]{[ItemIndex]}{0} & """, each TransformDataPackageFieldValue(""" & [ListItems]{[ItemIndex]}{1} & """, _)}"
                                           ),    
     
     //Prepare the the list of text for conversion into a list of lists
-    type_transformations_as_text = "{" & Text.Combine(type_transformations_as_list_of_text, ", ") & "}",
-    value_transformation_as_text = "{" & Text.Combine(value_transformations_as_list_of_text, ", ") & "}",
+    TypeTransformationsAsText = "{" & Text.Combine(TypeTransformationsAsListOfText, ", ") & "}",
+    ValueTransformationAsText = "{" & Text.Combine(ValueTransformationsAsListOfText, ", ") & "}",
  
     //Evaluate the generated expression to create the list of lists to be used for column type transformations
-    type_transformations = Expression.Evaluate(type_transformations_as_text),
+    TypeTransformations = Expression.Evaluate(TypeTransformationsAsText),
 
     //Explicitly exposed the TransformDataPackageFieldValue function to the Expression.Evaluate context
-    value_transformations = Expression.Evaluate(value_transformation_as_text, [TransformDataPackageFieldValue=TransformDataPackageFieldValue]),
+    ValueTransformations = Expression.Evaluate(ValueTransformationAsText, [TransformDataPackageFieldValue=TransformDataPackageFieldValue]),
     
     //Load the resource
-    untyped_resource_data = if Text.Contains(selected_resource_path, "http") = true or (data_package_location_type = "remote" and Text.Contains(selected_resource_path, "http") = false) then
-                              //This is a fully qualified URL or a fully qualified URL was derived from the base_path and relative path
-                              Csv.Document(Web.Contents(resource_path),[Delimiter=",", Columns=field_count, Encoding=65001])
+    UntypedResourceData = if Text.Contains(SelectedResourcePath, "http") = true or (DataPackageLocationType = "remote" and Text.Contains(SelectedResourcePath, "http") = false) then
+                              //This is a fully qualified URL or a fully qualified URL was derived from the base path and relative path
+                              Csv.Document(Web.Contents(ResourcePath),[Delimiter=",", Columns=FieldCount, Encoding=65001])
                             else
                               //This is a local resource
-                              Csv.Document(File.Contents(resource_path),[Delimiter=",", Columns=field_count, Encoding=65001]),
+                              Csv.Document(File.Contents(ResourcePath),[Delimiter=",", Columns=FieldCount, Encoding=65001]),
 
     //Promote the first row to the header
-    untyped_resource_data_with_promoted_header = Table.PromoteHeaders(untyped_resource_data),  
+    UntypedResourceDataWithPromotedHeader = Table.PromoteHeaders(UntypedResourceData),  
 
     //Create a list mapping the header column names (old) with the ones from the schema fields (new)
-    old_and_new_column_names = List.Zip({Table.ColumnNames(untyped_resource_data_with_promoted_header), field_names}),
+    OldAndNewColumnNames = List.Zip({Table.ColumnNames(UntypedResourceDataWithPromotedHeader), FieldNames}),
 
     //Loop through the list of lists and generate a text list of old and new column namnes
-    old_and_new_column_names_as_list_of_text = List.Generate(
-                                                 ()=>[list_items = old_and_new_column_names, item_index = 0],
-                                                 each [item_index] < field_count,
-                                                 each [list_items=[list_items], item_index = [item_index] + 1],
-                                                 each "{""" & [list_items]{[item_index]}{0} & """, """ & [list_items]{[item_index]}{1} & """}"
+    OldAndNewColumnNamesAsListOfText = List.Generate(
+                                                 ()=>[ListItems = OldAndNewColumnNames, ItemIndex = 0],
+                                                 each [ItemIndex] < FieldCount,
+                                                 each [ListItems=[ListItems], ItemIndex = [ItemIndex] + 1],
+                                                 each "{""" & [ListItems]{[ItemIndex]}{0} & """, """ & [ListItems]{[ItemIndex]}{1} & """}"
                                                ),
 
     //Prepare the the list of text for conversion into a list of lists
-    renamed_columns_list_as_text  = "{" & Text.Combine( old_and_new_column_names_as_list_of_text, ", ") & "}",
+    RenamedColumnsListAsText  = "{" & Text.Combine(OldAndNewColumnNamesAsListOfText, ", ") & "}",
     
     //Evaluate the generated expression to create the list of lists to be used for renaming the columns
-    renamed_columns = Expression.Evaluate(renamed_columns_list_as_text),    
+    RenamedColumns = Expression.Evaluate(RenamedColumnsListAsText),    
  
     //Apply the column names taken from the schema
-    untyped_resource_data_with_renamed_columns = Table.RenameColumns(untyped_resource_data_with_promoted_header, renamed_columns),
+    UntypedResourceDataWithRenamedColumns = Table.RenameColumns(UntypedResourceDataWithPromotedHeader, RenamedColumns),
 
     //Make the field values M data type compatible
-    conformed_resource_data = Table.TransformColumns(untyped_resource_data_with_renamed_columns, value_transformations),
+    ConformedResourceData = Table.TransformColumns(UntypedResourceDataWithRenamedColumns, ValueTransformations),
 
     //Apply the M data types to the columns
-    typed_resource_data = Table.TransformColumnTypes(conformed_resource_data, type_transformations),
+    TypedResourceData = Table.TransformColumnTypes(ConformedResourceData, TypeTransformations),
 
-    output_table = if resource_name = null and resource_index = null then
-                     all_resources_with_added_data_buffered
+    OutputTable = if ResourceName = null and ResourceIndex = null then
+                     AllResourcesWithAddedDataBuffered
                    else 
                      //Determine whether to apply the JSON Table Schema or return all columns as text
-                     if ignore_schema_types = false then
-                       typed_resource_data
+                     if IgnoreSchemaTypes = false then
+                       TypedResourceData
                      else
-                       untyped_resource_data_with_renamed_columns                       
+                       UntypedResourceDataWithRenamedColumns                       
 in
-    output_table
+    OutputTable
