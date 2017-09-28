@@ -51,8 +51,8 @@ For instructions on how to open the Query Editor window in Excel [click here](ht
 
 ### Option 3: Create a new function with the M code
 
-1. Download [GetTableFromDataPackage.txt](./functions/GetTableFromDataPackage.txt). Also download the two helper functions: [MapDataPackageFieldType.txt](./functions/MapDataPackageFieldType.txt) and [TransformDataPackageFieldValue.txt](./functions/TransformDataPackageFieldValue.txt).
-2. For each function, create a blank query, paste the M code into the Advanced Editor, click 'Done', and give the function the same name as its .txt file (e.g. for 'GetTableFromDataPackage.txt' this would be 'GetTableFromDataPackage').
+1. Download [GetTableFromDataPackage.pq](./functions/GetTableFromDataPackage.pq). Also download the two helper functions: [MapDataPackageFieldType.pq](./functions/MapDataPackageFieldType.pq) and [TransformDataPackageFieldValue.pq](./functions/TransformDataPackageFieldValue.pq).
+2. For each function, create a blank query, paste the M code into the Advanced Editor, click 'Done', and give the function the same name as its .pq file (e.g. for 'GetTableFromDataPackage.pq' this would be 'GetTableFromDataPackage').
  
 You're now ready to invoke the functions through the standard function invocation UI or via M code as shown in the examples below.
 
@@ -140,7 +140,7 @@ This work was created by [Nimble Learn](http://www.nimblelearn.com) and has been
 
 * When working with remote Data Packages located in GitHub, ensure that you are using the URL for the raw file e.g. [https://raw.githubusercontent.com/datasets/gdp/master/datapackage.json](https://raw.githubusercontent.com/datasets/gdp/master/datapackage.json) instead of [https://github.com/datasets/gdp/blob/master/datapackage.json](https://github.com/datasets/gdp/blob/master/datapackage.json) where the latter will give an error.
 
-* The functions can be adapted to work with the modern 'Get Data' experience in SQL Server vNext (CTP 1.1 or later) but this scenario is untested.
+* The functions can be adapted to work with the modern 'Get Data' experience in SQL Server 2017 but this scenario is untested.
 
 ## Known issues
 
