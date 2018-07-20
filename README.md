@@ -158,7 +158,7 @@ You can invoke the `DataPackage.Table` and `DataPackage.Tables` functions throug
 
 | Example File               | Description                                                                                  |
 | :------------------------- | :------------------------------------------------------------------------------------------- |
-| datapackage-m-example.xlsx | A simple Power BI Desktop example based on a [GDP](https://datahub.io/core/gdp) Data Package |
+| datapackage-m-example.pbix | A simple Power BI Desktop example based on a [GDP](https://datahub.io/core/gdp) Data Package |
 | datapackage-m-example.xlsx | A simple Excel Workbook example based on a [GDP](https://datahub.io/core/gdp) Data Package   |
 
 
