@@ -1,0 +1,51 @@
+{
+  "profile": "tabular-data-package",
+  "resources": [
+    {
+      "name": "opendataday-tweets",
+      "path": "data/subsetofopendatadaytweets.csv",
+      "schema": {
+        "fields": [
+          {
+            "name": "tweetid",
+            "type": "integer",
+            "format": "default",
+            "description": "tweet id"
+          },
+          {
+            "name": "retweetCount",
+            "type": "integer",
+            "format": "default",
+            "description": "number of retweets",
+            "constraints": { 
+              "minimum": 0 
+            }
+          }
+        ]
+      },
+      "profile": "tabular-data-resource"
+    }   
+  ],
+  "keywords": [
+    "open data day",
+    "odd18"
+  ],
+  "name": "opendataday-tweets-2018",
+  "title": "Open Data Day Tweets",
+  "description": "A stripped-down version of open data day data mined from Twitter in March 2018. Data Brevity is as a result of  Twitter's Developer Policy.",
+  "homepage": "https://okfnlabs.org/blog/2018/03/08/open-data-day-tweets.html",
+  "version": "1.0.0",
+  "licenses": [
+    {
+      "title": "Twitter Developer Agreement",
+      "path": "https://developer.twitter.com/en/developer-terms/agreement"
+    }
+  ],
+  "contributors": [
+    {
+      "title": "Serah Rono",
+      "path": "https://twitter.com/serahrono",
+      "role": "author"
+    }
+  ]
+}

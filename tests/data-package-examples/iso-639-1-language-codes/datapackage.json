@@ -1,0 +1,114 @@
+{
+  "profile": "tabular-data-package",
+  "name": "iso-639-1-language-codes",
+  "languages": ["en", "es"],
+  "title": {
+    "": "ISO 639-1 Language Codes",
+    "es": "ISO 639-1 Códigos de idioma"
+  },
+  "description": {
+    "": "ISO 639-1 two-letter language codes",
+    "es": "ISO 639-1 códigos de idioma de dos letras"
+  },
+  "version": "0.1.0",
+  "keywords": {
+    "": "language",
+    "es": "idioma"
+  },
+  "licenses": [{
+    "title": {
+      "": "Creative Commons Attribution Share-Alike 3.0",
+      "es": "Reconocimiento-CompartirIgual 3.0 España"
+    },
+    "path": {
+      "": "https://creativecommons.org/licenses/by-sa/3.0/",
+      "es": "https://creativecommons.org/licenses/by-sa/3.0/es/"
+    }
+  }],
+  "contributors": [{
+    "title": "Joe Bloggs",
+    "email": "joe@bloggs.com",
+    "path": "http://www.bloggs.com",
+    "role": {
+      "": "author",
+      "es": "autor"
+    },
+    "organization": {
+      "": "International Organization for Standardization",
+      "es": "Organización Internacional para la Estandarización"
+    }
+  }],
+  "resources": [{
+    "profile": "tabular-data-resource",
+    "path": "data/ISO-639-1-codes.csv",
+    "name": "iso-639-1-codes",
+    "title": {
+      "": "ISO 639-1 language codes",
+      "es": "ISO 639-1 códigos de idioma"
+    },
+    "description": {
+      "": "ISO 639-1: two-letter language codes",
+      "es": "ISO 639-1 códigos de idioma de dos letras"
+    },
+    "encoding": "UTF-8",
+    "format": "csv",
+    "mediatype": "text/csv",
+    "sources": [{
+      "title": "List of ISO 639-1 codes",
+      "path": "https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes"
+    }],
+    "schema": {
+      "fields": [{
+          "name": "ISO language name",
+          "title": {
+            "": "ISO language name",
+            "es": "ISO Nombre del lenguaje"
+          },
+          "type": "string",
+          "format": "default",
+          "constraints": {
+            "required": true
+          }
+        },
+        {
+          "name": "Native name (endonym)",
+          "title": {
+            "": "Native name (endonym)",
+            "es": "Nombre nativo (endónimo)"
+          },
+          "type": "string",
+          "format": "default"
+        },
+        {
+          "name": "639-1",
+          "type": "string",
+          "format": "default"
+        },
+        {
+          "name": "Notes",
+          "title": {
+            "": "Notes",
+            "es": "Notas"
+          },
+          "type": "string",
+          "format": "default"
+        }
+      ],
+      "missingValues": [
+        ""
+      ],
+      "primaryKeys": [
+        "639-1"
+      ]
+    },
+    "dialect": {
+      "delimiter": ",",
+      "quoteChar": "\"",
+      "header": true,
+      "doubleQuote": true,
+      "lineTerminator": "\r\n",
+      "skipInitialSpace": true,
+      "caseSensitiveHeader": false
+    }
+  }]
+}

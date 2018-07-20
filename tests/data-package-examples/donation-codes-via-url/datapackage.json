@@ -1,0 +1,22 @@
+{
+  "profile": "tabular-data-package",
+  "name": "donation-codes",
+  "title": "Donation Codes",
+  "version": "0.1.0",
+  "licenses": [{
+    "name": "CC-BY-4.0",
+    "title": "Creative Commons Attribution 4.0",
+    "path": "https://creativecommons.org/licenses/by/4.0/"
+  }],
+  "resources": [{
+    "profile": "tabular-data-resource",
+    "path": "https://raw.githubusercontent.com/frictionlessdata/example-data-packages/master/donation-codes/data/donation-codes.csv",
+    "name": "donation-codes",
+    "title": "Donation Codes",
+    "encoding": "UTF-8",
+    "format": "csv",
+    "mediatype": "text/csv",
+    "schema": "https://raw.githubusercontent.com/frictionlessdata/example-data-packages/master/donation-codes-schema/tableschema.json",
+    "dialect": "https://raw.githubusercontent.com/frictionlessdata/example-data-packages/master/resources/comma-separated-value-file-dialect.json"
+  }]
+}

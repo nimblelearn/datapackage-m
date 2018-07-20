@@ -1,0 +1,32 @@
+{
+  "name": "geo-countries",
+  "title": "Country Polygons as GeoJSON (Example)",
+  "description": "Example Data Package providing GeoJSON polygons for all the world's countries",
+  "licenses": [{
+    "id": "CC0-1.0",
+    "title": "CC0 1.0",
+    "url": "https://creativecommons.org/publicdomain/zero/1.0/"
+  }],
+  "resources": [
+    {
+      "name": "countries",
+      "path": "data/countries.geojson",
+      "format": "geojson",
+      "mediatype": "application/json",
+      "schema": {
+        "fields": [
+          {
+            "name": "ADMIN",
+            "description": "Common name of the country",
+            "type": "string"
+          },
+          {
+            "name": "ISO_A3",
+            "description": "3 characters code for the country, according to ISO3166 standard",
+            "type": "string"
+          }
+        ]
+      }
+    }
+  ]
+}

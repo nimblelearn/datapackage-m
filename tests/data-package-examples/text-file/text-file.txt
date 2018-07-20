@@ -1,0 +1,1 @@
+This is just a simple text file. It is not tabular. It includes some data. Tomorrow's winning lottery numbers are 10, 35, 17 and 42.

@@ -1,0 +1,141 @@
+{
+  "profile": "tabular-data-package",
+  "name": "units-and-prefixes",
+  "title": "Units and Unit Prefixes",
+  "version": "v0.1.0",
+  "contributors": [{
+      "title": "Andrew Berkeley ",
+      "role": "author"
+    },
+    {
+      "title": "James Smith",
+      "role": "author",
+      "organization": "Open Data Institute"
+    },
+    {
+      "title": "Rufus Pollock",
+      "role": "author",
+      "organization": "Open Knowledge International"
+    }
+  ],
+  "licenses": [{
+    "name": "CC-BY-4.0",
+    "title": "Creative Commons Attribution 4.0",
+    "path": "https://creativecommons.org/licenses/by/4.0/"
+  }],
+  "resources": [{
+      "profile": "tabular-data-resource",
+      "path": "data/units.csv",
+      "name": "units",
+      "title": "Standard Units",
+      "description": "Standard Units for the Frictionless Data specification",
+      "format": "csv",
+      "mediatype": "text/csv",
+      "encoding": "utf-8",
+      "sources": [{
+        "title": "Units",
+        "path": "http://specs.okfnlabs.org/units/"
+      }],
+      "schema": {
+        "fields": [{
+          "name": "UID",
+          "title": "Unique Unit Identifier",
+          "type": "string",
+          "format": "default",
+          "constraints": {
+            "required": true,
+            "unique": true
+          }
+        }, {
+          "name": "name",
+          "type": "string",
+          "format": "default"
+        }, {
+          "name": "symbol",
+          "type": "string",
+          "format": "default"
+        }, {
+          "name": "physical quantity",
+          "type": "string",
+          "format": "default"
+        }, {
+          "name": "dimensions",
+          "type": "string",
+          "format": "default"
+        }],
+        "missingValues": [
+          ""
+        ],
+        "primaryKeys": [
+          "UID"
+        ]
+      },
+      "dialect": {
+        "caseSensitiveHeader": false,
+        "delimiter": ",",
+        "doubleQuote": true,
+        "header": true,
+        "lineTerminator": "\r\n",
+        "quoteChar": "\"",
+        "skipInitialSpace": true
+      }
+    },
+    {
+      "profile": "tabular-data-resource",
+      "path": "data/unit-prefixes.csv",
+      "name": "unit-prefixes",
+      "title": "Unit Prefixes",
+      "description": "Standard Unit Prefixes for the Frictionless Data specification",
+      "format": "csv",
+      "mediatype": "text/csv",
+      "encoding": "utf-8",
+      "sources": [{
+        "title": "Units",
+        "path": "http://specs.okfnlabs.org/units/"
+      }],
+      "schema": {
+        "fields": [{
+            "name": "UID",
+            "title": "Unique Unit Prefix Identifier",
+            "type": "string",
+            "format": "default",
+            "constraints": {
+              "required": true,
+              "unique": true
+            }
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "format": "default"
+          },
+          {
+            "name": "symbol",
+            "type": "string",
+            "format": "default"
+          },
+          {
+            "name": "factor",
+            "type": "any",
+            "format": "default"
+          }
+        ],
+        "missingValues": [
+          ""
+        ],
+        "primaryKeys": [
+          "UID"
+        ]
+      },
+      "dialect": {
+        "caseSensitiveHeader": false,
+        "delimiter": ",",
+        "doubleQuote": true,
+        "header": true,
+        "lineTerminator": "\r\n",
+        "quoteChar": "\"",
+        "skipInitialSpace": true
+      }
+    }
+  ]
+}

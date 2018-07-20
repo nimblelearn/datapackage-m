@@ -1,0 +1,55 @@
+{
+  "profile": "tabular-data-package",
+  "name": "inflation",
+  "title": "Annual inflation by GDP deflator and consumer prices",
+  "description": "Annual growth rate of the GDP implicit deflator and Inflation measured by the consumer price index",
+  "resources": [{
+      "profile": "tabular-data-resource",
+      "name": "inflation-gdp",
+      "path": "data/inflation-gdp.csv",
+      "schema": {
+        "fields": [{
+            "name": "Country",
+            "type": "string"
+          },
+          {
+            "name": "Country Code",
+            "type": "string"
+          },
+          {
+            "name": "Year",
+            "type": "year"
+          },
+          {
+            "name": "Inflation",
+            "type": "number"
+          }
+        ]
+      }
+    },
+    {
+      "profile": "tabular-data-resource",
+      "name": "inflation-consumer-gdp",
+      "path": "data/inflation-consumer.csv",
+      "schema": {
+        "fields": [{
+            "name": "Country",
+            "type": "string"
+          },
+          {
+            "name": "Country Code",
+            "type": "string"
+          },
+          {
+            "name": "Year",
+            "type": "year"
+          },
+          {
+            "name": "Inflation",
+            "type": "number"
+          }
+        ]
+      }
+    }
+  ]
+}

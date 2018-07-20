@@ -1,0 +1,63 @@
+{
+  "profile": "tabular-data-package",
+  "resources": [{
+    "profile": "tabular-data-resource",
+    "encoding": "UTF-8",
+    "schema": {
+      "fields": [{
+        "name": "id",
+        "type": "integer",
+        "format": "default",
+        "constraints": {
+          "required": true,
+          "unique": true
+        }
+      }, {
+        "name": "amount $",
+        "type": "number",
+        "format": "default",
+        "constraints": {
+          "required": true,
+          "minimum": "0"
+        },
+        "title": "Donation Amount"
+      }, {
+        "name": "code",
+        "type": "string",
+        "format": "default",
+        "title": "Donation Code",
+        "constraints": {
+          "required": true
+        }
+      }],
+      "missingValues": [""]
+    },
+    "format": "csv",
+    "mediatype": "text/csv",
+    "licenses": [{
+      "name": "CC-BY-4.0",
+      "title": "Creative Commons Attribution 4.0",
+      "path": "https://creativecommons.org/licenses/by/4.0/"
+    }],
+    "name": "donations",
+    "title": "Donations",
+    "primaryKeys": ["id"],
+    "foreignKeys": [{
+      "fields": ["code"],
+      "reference": {
+        "package": "https://raw.githubusercontent.com/frictionlessdata/example-data-packages/master/donation-codes/datapackage.json",
+        "resource": "donation-codes",
+        "fields": ["donation code"]
+      }
+    }],
+    "path": "data/donations.csv"
+  }],
+  "licenses": [{
+    "name": "CC-BY-4.0",
+    "title": "Creative Commons Attribution 4.0",
+    "path": "https://creativecommons.org/licenses/by/4.0/"
+  }],
+  "name": "donations",
+  "title": "Donations",
+  "version": "0.1.0"
+}

@@ -1,0 +1,48 @@
+{
+  "profile": "tabular-data-package",
+  "resources": [{
+    "profile": "tabular-data-resource",
+    "encoding": "UTF-8",
+    "schema": {
+      "fields": [{
+        "format": "default",
+        "type": "string",
+        "name": "donation code",
+        "title": "Donation Code",
+        "constraints": {
+          "required": true,
+          "unique": true
+        }
+      }, {
+        "name": "description",
+        "type": "string",
+        "format": "default",
+        "constraints": {
+          "required": true,
+          "unique": true
+        },
+        "title": "Donation Code Description"
+      }],
+      "missingValues": [""]
+    },
+    "format": "csv",
+    "mediatype": "text/csv",
+    "licenses": [{
+      "name": "CC-BY-4.0",
+      "title": "Creative Commons Attribution 4.0",
+      "path": "https://creativecommons.org/licenses/by/4.0/"
+    }],
+    "name": "donation-codes",
+    "title": "Donation Codes",
+    "primaryKeys": ["donation code"],
+    "path": "data/donation-codes.csv"
+  }],
+  "licenses": [{
+    "name": "CC-BY-4.0",
+    "title": "Creative Commons Attribution 4.0",
+    "path": "https://creativecommons.org/licenses/by/4.0/"
+  }],
+  "name": "donation-codes",
+  "title": "Donation Codes",
+  "version": "0.1.0"
+}

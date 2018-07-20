@@ -1,0 +1,22 @@
+{
+  "fields": [{
+    "format": "default",
+    "type": "string",
+    "name": "donation code",
+    "title": "Donation Code",
+    "constraints": {
+      "required": true,
+      "unique": true
+    }
+  }, {
+    "name": "description",
+    "type": "string",
+    "format": "default",
+    "constraints": {
+      "required": true,
+      "unique": true
+    },
+    "title": "Donation Code Description"
+  }],
+  "missingValues": [""]
+}

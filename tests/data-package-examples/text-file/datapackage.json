@@ -1,0 +1,33 @@
+{
+  "name": "text-file",
+  "title": "Text File Data Package",
+  "description": "An example of a text file in a non-tabular data package",
+  "licenses": [{
+    "name": "CC0-1.0",
+    "title": "CC0 1.0",
+    "path": "https://creativecommons.org/publicdomain/zero/1.0/"
+  }],
+  "contributors": [
+    {
+      "title": "Joe Bloggs",
+      "email": "joe@example.com",
+      "path": "http://www.example.com/bloggs",
+      "role": "author",
+      "organization": "Bloggs and Associates"
+    },
+    {
+      "title": "Mary Shelley",
+      "email": "mshelly@example.com",
+      "role": "contributor"
+    }
+  ],
+  "version": "0.1.0",
+  "created": "2018-03-04T05:45:00Z",
+  "resources": [{
+    "name": "text-file",
+    "path": "text-file.txt",
+    "title": "Text File Data Resource",
+    "description": "An example of a text file as a non-tabular data resource",
+    "format": "txt"
+  }]
+}
