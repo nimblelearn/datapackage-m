@@ -1,13 +1,13 @@
 # Data Package M (datapackage-m)
 
-A set of functions written in [Power Query M](https://msdn.microsoft.com/en-us/library/mt211003.aspx?f=255&MSPPError=-2147217396) for working with [Tabular Data Packages](http://frictionlessdata.io/docs/tabular-data-package/) in [Power BI Desktop](https://powerbi.microsoft.com/en-us/desktop/) and [Power Query for Excel](https://support.office.com/en-us/article/introduction-to-microsoft-power-query-for-excel-6e92e2f4-2079-4e1f-bad5-89f6269cd605) (also known as 'Get & Transform Data' in Excel 2016). Data Package M functions implement several Frictionless Data [specifications](https://frictionlessdata.io/specs/) that help you to go from data to insight, *faster*.
+A set of functions written in [Power Query M](https://msdn.microsoft.com/en-us/library/mt211003.aspx?f=255&MSPPError=-2147217396) for working with [Tabular Data Packages](http://frictionlessdata.io/docs/tabular-data-package/) in [Power BI Desktop](https://powerbi.microsoft.com/en-us/desktop/) and [Power Query for Excel](https://support.office.com/en-us/article/introduction-to-microsoft-power-query-for-excel-6e92e2f4-2079-4e1f-bad5-89f6269cd605) (also known as 'Get & Transform' in Excel 2016). Data Package M functions implement several Frictionless Data [specifications](https://frictionlessdata.io/specs/) that help you to go from data to insight, *faster*.
 
 
 ## What is Frictionless Data?
 
 ![Frictionless Data](./images/frictionless-data/frictionless-data-logo-colour.png)
 
-A Tabular Data Package is a simple format for publishing and sharing tabular data. Tabular Data Packages extend and specialise the Data Package standard, and both come under the umbrella of [Frictionless Data](https://frictionlessdata.io/).
+A Tabular Data Package is a simple format for publishing and sharing tabular data. Tabular Data Packages extend and specialise the Data Package specification, and both come under the umbrella of [Frictionless Data](https://frictionlessdata.io/).
 
 Below is the vision statement taken from the Frictionless Data website:
 
@@ -132,7 +132,7 @@ For instructions on how to open the Power Query Editor window in Power BI Deskto
 ### Option 2: Excel Template
 
 1. Download the [latest release](https://github.com/nimblelearn/datapackage-m/releases).
-2. Open the 'datapackage-m-template.xltx' file found in the 'templates' folder with Excel 2010 or later. For Excel 2010 and 2013, you MUST have the [Power Query for Excel](https://www.microsoft.com/en-gb/download/details.aspx?id=39379) add-in installed (installing the latest version is recommended). Power Query is built-in from with Excel 2016 and later, and can be found under the 'Data' as 'Get and Transform Data'.
+2. Open the 'datapackage-m-template.xltx' file found in the 'templates' folder with Excel 2010 or later. For Excel 2010 and 2013, you MUST have the [Power Query for Excel](https://www.microsoft.com/en-gb/download/details.aspx?id=39379) add-in installed (installing the latest version is recommended). Power Query is built-in from with Excel 2016 and later, and can be found under the 'Data' tab in the 'Get & Transform Data' section.
 3. Open the Power Query Editor window and invoke the `DataPackageTable` or `DataPackageTables` function with a valid [Data Package Identifier String](https://frictionlessdata.io/specs/data-package-identifier/). Invoking the `DataPackageTable` function also requires a valid resource name or index.
 
 For instructions on how to open the Power Query Editor window in Excel [click here](https://support.office.com/en-gb/article/Introduction-to-the-Query-Editor-Power-Query-1d6cdb63-bf70-4ae8-a7d5-6ae9547004d9).
