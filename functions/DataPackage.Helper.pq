@@ -272,12 +272,12 @@ let
                           else
                               dataResource[compression]?,
         
-            Delimiter = if dataResource[delimiter]? is null then 
+            Delimiter = if dataResource[delimiter]? = null then 
                             "," 
                         else 
-                            DataPackage.ConvertFieldValue(dataResource[delimiter]),
+                            dataResource[delimiter]?,
         
-            Encoding = if dataResource[encoding]? is null then 
+            Encoding = if dataResource[encoding]? = null then 
                            65001 // UTF-8
                        else
                            // TODO: Needs mapping from valid codes (http://www.iana.org/assignments/character-sets/character-sets.xhtml) to M equivalents. This property is currently ignored and UTF-8 is always used.
