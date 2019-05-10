@@ -104,12 +104,12 @@ let
                                                    // The file extension check needs to work on a path that is text or a list (i.e. a path property with multiple data files)
                                                    each if [path] is list then
                                                           if Text.Contains([path]{0}, ".csv") or Text.Contains([path]{0}, ".csv.gz") then
-                                                              DataPackage.Table(dataPackageIdentifier, [index], null, ignoreTableSchemaTypes)
+                                                              DataPackage.Table(dataPackageIdentifier, Number.From([index]), null, ignoreTableSchemaTypes)
                                                           else 
                                                               null
                                                         else
                                                             if Text.Contains([path], ".csv") or Text.Contains([path], ".csv.gz") then
-                                                              DataPackage.Table(dataPackageIdentifier, [index], null, ignoreTableSchemaTypes)
+                                                              DataPackage.Table(dataPackageIdentifier, Number.From([index]), null, ignoreTableSchemaTypes)
                                                         else 
                                                             null
                                                ),
