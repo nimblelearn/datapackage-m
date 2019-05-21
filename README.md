@@ -1,6 +1,6 @@
 # Data Package M (datapackage-m)
 
-A set of functions written in [Power Query M](https://msdn.microsoft.com/en-us/library/mt211003.aspx?f=255&MSPPError=-2147217396) for working with [Tabular Data Packages](http://frictionlessdata.io/docs/tabular-data-package/) in [Power BI Desktop](https://powerbi.microsoft.com/en-us/desktop/) and [Power Query for Excel](https://support.office.com/en-us/article/introduction-to-microsoft-power-query-for-excel-6e92e2f4-2079-4e1f-bad5-89f6269cd605) (also known as 'Get & Transform' in Excel 2016). Data Package M functions implement several Frictionless Data [specifications](https://frictionlessdata.io/specs/) that help you to go from data to insight, *faster*.
+A set of functions written in [Power Query M](https://msdn.microsoft.com/en-us/library/mt211003.aspx?f=255&MSPPError=-2147217396) for working with [Tabular Data Packages](http://frictionlessdata.io/docs/tabular-data-package/) in [Power BI Desktop](https://powerbi.microsoft.com/en-us/desktop/) and [Power Query for Excel](https://support.office.com/en-us/article/introduction-to-microsoft-power-query-for-excel-6e92e2f4-2079-4e1f-bad5-89f6269cd605) (also known as 'Get & Transform' in Excel 2016 and later). Data Package M functions implement several Frictionless Data [specifications](https://frictionlessdata.io/specs/) that help you to go from data to insight, *faster*.
 
 
 ## What is Frictionless Data?
@@ -113,11 +113,12 @@ The Data Package M functions are aligned closely with the v1 Frictionless Data s
 | :------------------------------------------- | :--------------------------------------------------- | :-------------------------------------- |
 | Data Package Identifier resolution           | [Data Package Identifier](https://frictionlessdata.io/specs/data-package-identifier/) | Identifier Strings only |
 | Remote and local resource path handling      | [Data Resource](https://frictionlessdata.io/specs/data-resource/), [Tabular Data Resource](https://frictionlessdata.io/specs/tabular-data-resource/) | Includes handling path arrays (i.e. data in multiple files)  |
-| Tabular Data Resource metadata handling      | [Tabular Data Resource](https://frictionlessdata.io/specs/tabular-data-resource/) | 'dialect' is partially handled. 'encoding' is ignored and UTF-8 is always used.|
+| Tabular Data Resource metadata handling      | [Tabular Data Resource](https://frictionlessdata.io/specs/tabular-data-resource/) | 'dialect' is partially handled. 'encoding' is handled for the most common encoding types**|
 | Table Schema type conversions                | [Table Schema](https://frictionlessdata.io/specs/table-schema/), [Tabular Data Resource](https://frictionlessdata.io/specs/tabular-data-resource/) | [Partial support](#table-schema-type-conversions). Includes resolving and applying remote schemas. |
 | Inline data handling                         | [Tabular Data Resource](https://frictionlessdata.io/specs/tabular-data-resource/) | |
 | Compressed resource handling                 | [Compression Resources Pattern (WIP)](https://github.com/frictionlessdata/specs/issues/290) | Gzip compression support only    |
 
+**The currently handled encoding types are gb2312, x-cp20949, euc-jp, iso-8859-1, iso-8859-2, iso-8859-3, iso-8859-4, iso-8859-5, iso-8859-6, iso-8859-7, iso-8859-8, iso-8859-9, iso-8859-13, iso-8859-15, us-ascii, utf-32be, utf-32, utf-16, utf-8, utf-7, and windows-1252.
 
 ## Setup
 
@@ -295,6 +296,6 @@ This work was created by [Nimble Learn](http://www.nimblelearn.com) and has been
 
 ### Power BI Service Data Refresh Support
 
-Data refresh currently works from Power BI Desktop and Power Query for Excel but not from the Power BI service. The Power BI service performs a static analysis on all the Power Query M expressions in a Power BI file to determine whether it can be refreshed by the service. One scenario where a data refresh is not supported is when the [Web.Contents](https://msdn.microsoft.com/en-us/query-bi/m/web-contents?f=255&MSPPError=-2147217396) function is used with a [dynamically generated URL](https://ideas.powerbi.com/forums/265200-power-bi-ideas/suggestions/10927416-web-contents-should-support-scheduled-refresh-ev).
+Data refresh currently works from Power BI Desktop and Power Query for Excel but not from the Power BI service. The Power BI service performs a static analysis on all the Power Query M expressions in a Power BI file to determine whether it can be refreshed by the service. One scenario where a data refresh is not supported is when the [Web.Contents](https://msdn.microsoft.com/en-us/query-bi/m/web-contents?f=255&MSPPError=-2147217396) function is used with a [dynamically generated URL](https://ideas.powerbi.com/forums/265200-power-bi-ideas/suggestions/10927416-web-contents-should-support-scheduled-refresh-ev). This is one of the functions that Data Package M uses and to dynamically handle Data Packages and this currently prevents the Power BI Service from being able to refresh the data.
 
-There is a known workaround for the Web.Contents issue (i.e. setting up a base URL that redirects to a URL in a query string), but there are a few other things that can also cause the data refresh not to be supported by the Power BI service. When we've figured out which ones apply to Data Package M, we'll look at addressing them in a future release.
+If you require Power BI service data refresh support, you can try the [Data Package Connector](https://github.com/nimblelearn/datapackage-connector). This is a [Power BI Custom Connector](https://docs.microsoft.com/en-us/power-bi/desktop-connector-extensibility) that's based on the same Data Package M functions and supports data refresh in the Power BI service through a [Power BI Data Gateway](https://docs.microsoft.com/en-us/power-bi/service-gateway-onprem).

@@ -1,0 +1,1 @@
+Multiple versions of the same file with different encodings.

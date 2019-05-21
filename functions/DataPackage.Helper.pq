@@ -276,12 +276,39 @@ let
                             "," 
                         else 
                             dataResource[delimiter]?,
-        
+            
+            // Mapping common encodings to their corresponding code page identifiers. The mappings were sourced from: https://docs.microsoft.com/en-us/windows/desktop/intl/code-page-identifiers.
+            CodePageIdentifiers = [
+                                      #"gb2312" = 936,        // ANSI/OEM Simplified Chinese (PRC, Singapore); Chinese Simplified (GB2312)
+                                      #"x-cp20949" = 20949,   // Korean Wansung
+                                      #"euc-jp" = 20932,      // Japanese (JIS 0208-1990 and 0212-1990)
+                                      #"iso-8859-1" = 28591,  // ISO 8859-1 Latin 1; Western European (ISO)
+                                      #"iso-8859-2" = 28592,  // ISO 8859-2 Central European; Central European (ISO)
+                                      #"iso-8859-3" = 28593,  // ISO 8859-3 Latin 3
+                                      #"iso-8859-4" = 28594,  // ISO 8859-4 Baltic
+                                      #"iso-8859-5" = 28595,  // ISO 8859-5 Cyrillic
+                                      #"iso-8859-6" = 28596,  // ISO 8859-6 Arabic
+                                      #"iso-8859-7" = 28597,  // ISO 8859-7 Greek
+                                      #"iso-8859-8" = 28598,  // ISO 8859-8 Hebrew; Hebrew (ISO-Visual)
+                                      #"iso-8859-9" = 28599,  // ISO 8859-9 Turkish
+                                      #"iso-8859-13" = 28603, // ISO 8859-13 Estonian
+                                      #"iso-8859-15" = 28605, // ISO 8859-15 Latin 9
+                                      #"us-ascii" = 20127,    // US-ASCII (7-bit)
+                                      #"utf-32be" = 12001,    // Unicode UTF-32, big endian byte order; available only to managed applications
+                                      #"utf-32" = 12000,      // Unicode UTF-32, little endian byte order; available only to managed applications
+                                      #"utf-16" = 1200,       // Unicode UTF-16, little endian byte order (BMP of ISO 10646); available only to managed applications
+                                      #"utf-8" = 65001,       // Unicode (UTF-8)
+                                      #"utf-7" = 65000,       // Unicode (UTF-7)
+                                      #"windows-1252"= 1252   // ANSI Latin 1; Western European (Windows)
+                                  ], 
             Encoding = if dataResource[encoding]? = null then 
-                           65001 // UTF-8
+                           65001 // UTF-8 encoding is used when this property is missing
                        else
-                           // TODO: Needs mapping from valid codes (http://www.iana.org/assignments/character-sets/character-sets.xhtml) to M equivalents. This property is currently ignored and UTF-8 is always used.
-                           65001 /*dataResource[encoding]?*/,
+                           // Look-up the corresponding code page identifier
+                           Record.Field(
+                               CodePageIdentifiers,
+                               Text.Lower(Text.From(dataResource[encoding]?))
+                           ),
         
             DocumentOptions = [
                                   Delimiter = Delimiter, 

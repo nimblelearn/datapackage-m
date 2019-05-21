@@ -1,0 +1,371 @@
+{
+  "profile": "tabular-data-package",
+  "name": "currencies-encoding-tests",
+  "title": "Countries and Currencies (Encoding Tests)",
+  "version": "v0.1.0",
+  "licenses": [
+    {
+      "name": "CC0-1.0",
+      "title": "Creative Commons CCZero 1.0",
+      "path": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+  ],
+  "resources": [
+    {
+      "profile": "tabular-data-resource",
+      "name": "currencies-gb2312.csv",
+      "title": "Currencies (gb2312)",
+      "path": "data/currencies-gb2312.csv",
+      "encoding": "gb2312",
+      "format": "csv",
+      "mediatype": "text/csv",
+      "licenses": [
+        {
+          "name": "CC0-1.0",
+          "title": "Creative Commons CCZero 1.0",
+          "path": "https://creativecommons.org/publicdomain/zero/1.0/"
+        }
+      ],
+      "schema": {
+        "fields": [
+          {
+            "name": "currency_alphabetic_code",
+            "type": "string",
+            "format": "default",
+            "title": "Currency Alphabetic Code"
+          },
+          {
+            "name": "currency",
+            "type": "string",
+            "format": "default"
+          },
+          {
+            "name": "symbol",
+            "type": "string",
+            "format": "default"
+          }
+        ],
+        "missingValues": [
+          ""
+        ]
+      },
+      "dialect": {
+        "delimiter": ",",
+        "quoteChar": "\"",
+        "header": true,
+        "doubleQuote": true,
+        "lineTerminator": "\r\n",
+        "skipInitialSpace": true,
+        "caseSensitiveHeader": false
+      },
+      "primaryKeys": [
+        "currency_alphabetic_code"
+      ]
+    },
+    {
+      "profile": "tabular-data-resource",
+      "name": "currencies-iso-8859-1.csv",
+      "title": "Currencies (iso-8859-1)",
+      "path": "data/currencies-iso-8859-1.csv",
+      "encoding": "iso-8859-1",
+      "format": "csv",
+      "mediatype": "text/csv",
+      "licenses": [
+        {
+          "name": "CC0-1.0",
+          "title": "Creative Commons CCZero 1.0",
+          "path": "https://creativecommons.org/publicdomain/zero/1.0/"
+        }
+      ],
+      "schema": {
+        "fields": [
+          {
+            "name": "currency_alphabetic_code",
+            "type": "string",
+            "format": "default",
+            "title": "Currency Alphabetic Code"
+          },
+          {
+            "name": "currency",
+            "type": "string",
+            "format": "default"
+          },
+          {
+            "name": "symbol",
+            "type": "string",
+            "format": "default"
+          }
+        ],
+        "missingValues": [
+          ""
+        ]
+      },
+      "dialect": {
+        "delimiter": ",",
+        "quoteChar": "\"",
+        "header": true,
+        "doubleQuote": true,
+        "lineTerminator": "\r\n",
+        "skipInitialSpace": true,
+        "caseSensitiveHeader": false
+      },
+      "primaryKeys": [
+        "currency_alphabetic_code"
+      ]
+    },
+    {
+      "profile": "tabular-data-resource",
+      "name": "currencies-no-encoding-property.csv",
+      "title": "Currencies (no-encoding-property)",
+      "path": "data/currencies-no-encoding-property.csv",
+      "format": "csv",
+      "mediatype": "text/csv",
+      "licenses": [
+        {
+          "name": "CC0-1.0",
+          "title": "Creative Commons CCZero 1.0",
+          "path": "https://creativecommons.org/publicdomain/zero/1.0/"
+        }
+      ],
+      "schema": {
+        "fields": [
+          {
+            "name": "currency_alphabetic_code",
+            "type": "string",
+            "format": "default",
+            "title": "Currency Alphabetic Code"
+          },
+          {
+            "name": "currency",
+            "type": "string",
+            "format": "default"
+          },
+          {
+            "name": "symbol",
+            "type": "string",
+            "format": "default"
+          }
+        ],
+        "missingValues": [
+          ""
+        ]
+      },
+      "dialect": {
+        "delimiter": ",",
+        "quoteChar": "\"",
+        "header": true,
+        "doubleQuote": true,
+        "lineTerminator": "\r\n",
+        "skipInitialSpace": true,
+        "caseSensitiveHeader": false
+      },
+      "primaryKeys": [
+        "currency_alphabetic_code"
+      ]
+    },
+    {
+      "profile": "tabular-data-resource",
+      "name": "currencies-iso-8859-2.csv",
+      "title": "Currencies (iso-8859-2) - '£' will appear as '?'",
+      "path": "data/currencies-iso-8859-2.csv",
+      "encoding": "iso-8859-2",
+      "format": "csv",
+      "mediatype": "text/csv",
+      "licenses": [
+        {
+          "name": "CC0-1.0",
+          "title": "Creative Commons CCZero 1.0",
+          "path": "https://creativecommons.org/publicdomain/zero/1.0/"
+        }
+      ],
+      "schema": {
+        "fields": [
+          {
+            "name": "currency_alphabetic_code",
+            "type": "string",
+            "format": "default",
+            "title": "Currency Alphabetic Code"
+          },
+          {
+            "name": "currency",
+            "type": "string",
+            "format": "default"
+          },
+          {
+            "name": "symbol",
+            "type": "string",
+            "format": "default"
+          }
+        ],
+        "missingValues": [
+          ""
+        ]
+      },
+      "dialect": {
+        "delimiter": ",",
+        "quoteChar": "\"",
+        "header": true,
+        "doubleQuote": true,
+        "lineTerminator": "\r\n",
+        "skipInitialSpace": true,
+        "caseSensitiveHeader": false
+      },
+      "primaryKeys": [
+        "currency_alphabetic_code"
+      ]
+    },
+    {
+      "profile": "tabular-data-resource",
+      "name": "currencies-iso-8859-3.csv",
+      "title": "Currencies (iso-8859-3)",
+      "path": "data/currencies-iso-8859-3.csv",
+      "encoding": "iso-8859-3",
+      "format": "csv",
+      "mediatype": "text/csv",
+      "licenses": [
+        {
+          "name": "CC0-1.0",
+          "title": "Creative Commons CCZero 1.0",
+          "path": "https://creativecommons.org/publicdomain/zero/1.0/"
+        }
+      ],
+      "schema": {
+        "fields": [
+          {
+            "name": "currency_alphabetic_code",
+            "type": "string",
+            "format": "default",
+            "title": "Currency Alphabetic Code"
+          },
+          {
+            "name": "currency",
+            "type": "string",
+            "format": "default"
+          },
+          {
+            "name": "symbol",
+            "type": "string",
+            "format": "default"
+          }
+        ],
+        "missingValues": [
+          ""
+        ]
+      },
+      "dialect": {
+        "delimiter": ",",
+        "quoteChar": "\"",
+        "header": true,
+        "doubleQuote": true,
+        "lineTerminator": "\r\n",
+        "skipInitialSpace": true,
+        "caseSensitiveHeader": false
+      },
+      "primaryKeys": [
+        "currency_alphabetic_code"
+      ]
+    },
+    {
+      "profile": "tabular-data-resource",
+      "name": "currencies-utf-8.csv",
+      "title": "Currencies (utf-8)",
+      "path": "data/currencies-utf-8.csv",
+      "encoding": "utf-8",
+      "format": "csv",
+      "mediatype": "text/csv",
+      "licenses": [
+        {
+          "name": "CC0-1.0",
+          "title": "Creative Commons CCZero 1.0",
+          "path": "https://creativecommons.org/publicdomain/zero/1.0/"
+        }
+      ],
+      "schema": {
+        "fields": [
+          {
+            "name": "currency_alphabetic_code",
+            "type": "string",
+            "format": "default",
+            "title": "Currency Alphabetic Code"
+          },
+          {
+            "name": "currency",
+            "type": "string",
+            "format": "default"
+          },
+          {
+            "name": "symbol",
+            "type": "string",
+            "format": "default"
+          }
+        ],
+        "missingValues": [
+          ""
+        ]
+      },
+      "dialect": {
+        "delimiter": ",",
+        "quoteChar": "\"",
+        "header": true,
+        "doubleQuote": true,
+        "lineTerminator": "\r\n",
+        "skipInitialSpace": true,
+        "caseSensitiveHeader": false
+      },
+      "primaryKeys": [
+        "currency_alphabetic_code"
+      ]
+    },
+    {
+      "profile": "tabular-data-resource",
+      "name": "currencies-windows-1252.csv",
+      "title": "Currencies (windows-1252)",
+      "path": "data/currencies-windows-1252.csv",
+      "encoding": "windows-1252",
+      "format": "csv",
+      "mediatype": "text/csv",
+      "licenses": [
+        {
+          "name": "CC0-1.0",
+          "title": "Creative Commons CCZero 1.0",
+          "path": "https://creativecommons.org/publicdomain/zero/1.0/"
+        }
+      ],
+      "schema": {
+        "fields": [
+          {
+            "name": "currency_alphabetic_code",
+            "type": "string",
+            "format": "default",
+            "title": "Currency Alphabetic Code"
+          },
+          {
+            "name": "currency",
+            "type": "string",
+            "format": "default"
+          },
+          {
+            "name": "symbol",
+            "type": "string",
+            "format": "default"
+          }
+        ],
+        "missingValues": [
+          ""
+        ]
+      },
+      "dialect": {
+        "delimiter": ",",
+        "quoteChar": "\"",
+        "header": true,
+        "doubleQuote": true,
+        "lineTerminator": "\r\n",
+        "skipInitialSpace": true,
+        "caseSensitiveHeader": false
+      },
+      "primaryKeys": [
+        "currency_alphabetic_code"
+      ]
+    }
+  ]
+}
