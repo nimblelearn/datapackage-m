@@ -5,13 +5,9 @@ A set of functions written in [Power Query M](https://msdn.microsoft.com/en-us/l
 
 ## What is Frictionless Data?
 
-![Frictionless Data](./images/frictionless-data/frictionless-data-logo-colour.png)
+![Frictionless Data](./images/frictionless-data/frictionless-color-full-logo.svg)
 
 A Tabular Data Package is a simple format for publishing and sharing tabular data. Tabular Data Packages extend and specialise the Data Package specification, and both come under the umbrella of [Frictionless Data](https://frictionlessdata.io/).
-
-Below is the vision statement taken from the Frictionless Data website:
-
->Frictionless Data shortens the path from data to insight with a collection of [specifications](https://frictionlessdata.io/specs/) and [software](https://frictionlessdata.io/software/) for the publication, transport, and consumption of data. At the heart of our approach is a deep understanding of the multi-faceted nature of data work, and an emphasis on platform-agnostic interoperability. From consumer spreadsheet software, through to cloud-based services for data analysis, the future of data is frictionless.
 
 Visit [https://frictionlessdata.io](https://frictionlessdata.io) to learn more.
 
@@ -20,32 +16,32 @@ Visit [https://frictionlessdata.io](https://frictionlessdata.io) to learn more.
 
 ![Microsoft Power BI UI: Data Package M in Action in Power BI](./images/power-bi/datapackage-m-in-action-power-bi.gif)
 
-![Microsoft Power BI UI: Invoke Function](./images/power-bi/datapackage-m-power-bi-illustration-01-1080.png)  
+![Microsoft Power BI UI: Invoke Function](./images/power-bi/datapackage-m-power-bi-illustration-01.png)  
 *Invoking the `DataPackage.Tables` function*
 
-![Microsoft Power BI UI: Resource Navigation](./images/power-bi/datapackage-m-power-bi-illustration-02-1080.png)  
+![Microsoft Power BI UI: Resource Navigation](./images/power-bi/datapackage-m-power-bi-illustration-02.png)  
 *Viewing the resources for a GDP Tabular Data Package and previewing the resource data*  
 
-![Microsoft Power BI UI: GDP Tabular Data Package Resource Data](./images/power-bi/datapackage-m-power-bi-illustration-03-1080.png)  
+![Microsoft Power BI UI: GDP Tabular Data Package Resource Data](./images/power-bi/datapackage-m-power-bi-illustration-03.png)  
 *Getting a table from a GDP Tabular Data Package resource after navigating from the resource list*
 
-![Microsoft Power BI UI: GDP Tabular Data Package Visualisation](./images/power-bi/datapackage-m-power-bi-illustration-04-1080.png)  
+![Microsoft Power BI UI: GDP Tabular Data Package Visualisation](./images/power-bi/datapackage-m-power-bi-illustration-04.png)  
 *Creating a quick visualisation of the GDP data*
 
 ## Data Package M in Power Query for Excel
 
 ![Microsoft Power BI UI: Data Package M in Action in Excel](./images/excel/datapackage-m-in-action-excel.gif)
 
-![Microsoft Excel UI: Invoke Function](./images/excel/datapackage-m-excel-illustration-01-1080.png)  
+![Microsoft Excel UI: Invoke Function](./images/excel/datapackage-m-excel-illustration-01.png)  
 *Invoking the `DataPackage.Tables` function*
 
-![Microsoft Excel UI: Resource Navigation](./images/excel/datapackage-m-excel-illustration-02-1080.png)  
+![Microsoft Excel UI: Resource Navigation](./images/excel/datapackage-m-excel-illustration-02.png)  
 *Viewing the resources for a GDP Tabular Data Package and previewing the resource data*  
 
-![Microsoft Excel UI: GDP Tabular Data Package Resource Data](./images/excel/datapackage-m-excel-illustration-03-1080.png)  
+![Microsoft Excel UI: GDP Tabular Data Package Resource Data](./images/excel/datapackage-m-excel-illustration-03.png)  
 *Getting a table from a GDP Tabular Data Package resource after navigating from the resource list*
 
-![Microsoft Excel UI: GDP Tabular Data Package Worksheet](./images/excel/datapackage-m-excel-illustration-04-1080.png)  
+![Microsoft Excel UI: GDP Tabular Data Package Worksheet](./images/excel/datapackage-m-excel-illustration-04.png)  
 *The GDP table is loaded to a new Excel Worksheet and/or [Data Model](https://support.office.com/en-us/article/create-a-data-model-in-excel-87e7a54c-87dc-488e-9410-5c75dbcb0f7b) and ready for analysis*
 
 ## Data Package M Functions
@@ -296,6 +292,6 @@ This work was created by [Nimble Learn](http://www.nimblelearn.com) and has been
 
 ### Power BI Service Data Refresh Support
 
-Data refresh currently works from Power BI Desktop and Power Query for Excel but not from the Power BI service. The Power BI service performs a static analysis on all the Power Query M expressions in a Power BI file to determine whether it can be refreshed by the service. One scenario where a data refresh is not supported is when the [Web.Contents](https://msdn.microsoft.com/en-us/query-bi/m/web-contents?f=255&MSPPError=-2147217396) function is used with a [dynamically generated URL](https://ideas.powerbi.com/forums/265200-power-bi-ideas/suggestions/10927416-web-contents-should-support-scheduled-refresh-ev). This is one of the functions that Data Package M uses to dynamically handle Data Packages and this currently prevents the Power BI Service from being able to refresh the data.
+Data refresh only works from Power BI Desktop and Power Query for Excel but not from the Power BI service. The Power BI service performs a static analysis on all the Power Query M expressions in a Power BI file to determine whether it can be refreshed by the service. One scenario where a data refresh is not supported is when the [Web.Contents](https://msdn.microsoft.com/en-us/query-bi/m/web-contents?f=255&MSPPError=-2147217396) function is used with a [dynamically generated URL](https://ideas.powerbi.com/forums/265200-power-bi-ideas/suggestions/10927416-web-contents-should-support-scheduled-refresh-ev). This is one of the functions that Data Package M uses to dynamically handle Data Packages and this currently prevents the Power BI Service from being able to refresh the data.
 
-If you require Power BI service data refresh support, you can try the [Data Package Connector](https://github.com/nimblelearn/datapackage-connector). This is a [Power BI Custom Connector](https://docs.microsoft.com/en-us/power-bi/desktop-connector-extensibility) that's based on the same Data Package M functions and supports data refresh in the Power BI service through a [Power BI Data Gateway](https://docs.microsoft.com/en-us/power-bi/service-gateway-onprem).
+If you require Power BI service data refresh support, you can try the [Data Package Connector](https://github.com/nimblelearn/datapackage-connector). This is a [Power BI Custom Connector](https://docs.microsoft.com/en-us/power-bi/desktop-connector-extensibility) that's based on the same Data Package M functions and supports data refresh in the Power BI service through an [On-premises data gateway](https://docs.microsoft.com/en-us/power-bi/service-gateway-onprem).

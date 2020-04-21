@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 2018 Nimble Learn Ltd (http://www.nimblelearn.com)
+Copyright (c) 2018-2020 Nimble Learn Ltd (http://www.nimblelearn.com)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -202,17 +202,7 @@ let
                               "none"
                           else 
                               Text.Lower(compression),
-
-            // Working around the limitation of the Power BI service not supporting data refresh when Web.Contents is used with a fully dynamic URL.
-            // See this Power BI Idea: https://ideas.powerbi.com/forums/265200-power-bi-ideas/suggestions/10927416-web-contents-should-support-scheduled-refresh-ev.
-            // This workaround will be applied by in a future release.
-            /*WebContents = Web.Contents(
-                              "https://datapackage-m-redirector.azurewebsites.net",
-                              [RelativePath = "?redirect=" & path]
-                          ),*/
-
             WebContents = Web.Contents(path),
-
             FileContents = File.Contents(path),
             CompressionErrorMessage = "Unsupported compression type. Allowed values: ""none"", ""gz"".",
             PathTypeErrorMessage = "Unsupported path type. Allowed values: ""remote"", ""local"".",
@@ -305,9 +295,12 @@ let
                            65001 // UTF-8 encoding is used when this property is missing
                        else
                            // Look-up the corresponding code page identifier
-                           Record.Field(
-                               CodePageIdentifiers,
-                               Text.Lower(Text.From(dataResource[encoding]?))
+                           (
+                               try Record.Field(
+                                   CodePageIdentifiers,
+                                   Text.Lower(Text.From(dataResource[encoding]?))
+                                   )
+                               otherwise 65001
                            ),
         
             DocumentOptions = [
