@@ -1,6 +1,6 @@
 # Data Package M (datapackage-m)
 
-A set of functions written in [Power Query M](https://msdn.microsoft.com/en-us/library/mt211003.aspx?f=255&MSPPError=-2147217396) for working with [Tabular Data Packages](http://frictionlessdata.io/docs/tabular-data-package/) in [Power BI Desktop](https://powerbi.microsoft.com/en-us/desktop/) and [Power Query for Excel](https://support.office.com/en-us/article/introduction-to-microsoft-power-query-for-excel-6e92e2f4-2079-4e1f-bad5-89f6269cd605) (also known as 'Get & Transform' in Excel 2016 and later). Data Package M functions implement several Frictionless Data [specifications](https://frictionlessdata.io/specs/) that help you to go from data to insight, *faster*.
+A set of functions written in [Power Query M](https://docs.microsoft.com/en-us/powerquery-m/) for working with [Tabular Data Packages](https://specs.frictionlessdata.io/tabular-data-package) in [Power BI Desktop](https://powerbi.microsoft.com/en-us/desktop/) and [Power Query for Excel](https://powerquery.microsoft.com/en-us/excel/) (also known as 'Get & Transform' in Excel 2016 and later). Data Package M functions implement several Frictionless Data [specifications](https://specs.frictionlessdata.io/) that help you to go from data to insight, *faster*.
 
 
 ## What is Frictionless Data?
@@ -48,8 +48,8 @@ Visit [https://frictionlessdata.io](https://frictionlessdata.io) to learn more.
 
 | Function Name      | Query/Shared Name*       | Description                                                                 |
 | :----------------- | :---------------- | :-------------------------------------------------------------------------- |
-| DataPackage.Table  | DataPackageTable  | Returns a [Tabular Data Resource](https://frictionlessdata.io/specs/tabular-data-resource/) as a `table` |
-| DataPackage.Tables | DataPackageTables | Returns a `table` that lists the [Data Resources](https://frictionlessdata.io/specs/data-resource/) contained within a Data Package |
+| DataPackage.Table  | DataPackageTable  | Returns a [Tabular Data Resource](https://specs.frictionlessdata.io/tabular-data-resource/) as a `table` |
+| DataPackage.Tables | DataPackageTables | Returns a `table` that lists the [Data Resources](https://specs.frictionlessdata.io/data-resource/) contained within a Data Package |
 | DataPackage.Helper | DataPackageHelper | Returns a Data Package helper function as a `function`                      |
 
 *This is the name that appears in the Power Query Editor in the 'Queries' pane. When invoking the functions through the Power Query Editor's 'Invoke Function' dialog, this name will appear in the auto-generated Power Query M expressions. This is also the name that will be exposed to the shared function library when the functions have been [setup](#setup).
@@ -59,7 +59,7 @@ Visit [https://frictionlessdata.io](https://frictionlessdata.io) to learn more.
 
 | Parameter              | Type         | Description                                              |
 | :--------------------- | :----------- | :------------------------------------------------------- |
-| dataPackageIdentifier  | text         | A valid [Data Package Identifier](https://frictionlessdata.io/specs/data-package-identifier/) |
+| dataPackageIdentifier  | text         | A valid [Data Package Identifier](https://specs.frictionlessdata.io/data-package-identifier/) |
 | dataResourceIndex      | number       | A valid Data Resource index                              |
 | dataResourceName       | text         | A valid Data Resource name                               |
 | ignoreTableSchemaTypes | logical      | Controls whether the Table Schema is applied to the data |
@@ -69,8 +69,8 @@ Visit [https://frictionlessdata.io](https://frictionlessdata.io) to learn more.
 
 | Parameter              | Type         | Description                                              |
 | :--------------------- | :----------- | :------------------------------------------------------- |
-| dataPackageIdentifier  | text         | A valid [Data Package Identifier](https://frictionlessdata.io/specs/data-package-identifier/) |
-| ignoreTableSchemaTypes | logical      | Controls whether the [Table Schema](https://frictionlessdata.io/specs/table-schema/) is applied to the data |
+| dataPackageIdentifier  | text         | A valid [Data Package Identifier](https://specs.frictionlessdata.io/data-package-identifier/) |
+| ignoreTableSchemaTypes | logical      | Controls whether the [Table Schema](https://specs.frictionlessdata.io/table-schema/) is applied to the data |
 
 Any Data Resource that is detected as being tabular will contain the data table in the 'data' column. Data Package properties that are inferred and added by Data Package M have their name preceded by double underscore e.g. '__fullpath'.
 
@@ -86,7 +86,7 @@ This is a special function that acts as a library of Data Package helper functio
 
 ## Table Schema Type Conversions
 
-Type conversion is attempted for the most common [Table Schema](https://frictionlessdata.io/specs/table-schema/) types:
+Type conversion is attempted for the most common [Table Schema](https://specs.frictionlessdata.io/table-schema/) types:
 
 | Table Schema Type | M Type   |
 | :-----------------| :------- |
@@ -107,12 +107,12 @@ The Data Package M functions are aligned closely with the v1 Frictionless Data s
 
 | Feature                                      | Specification                                        | Notes                                   |
 | :------------------------------------------- | :--------------------------------------------------- | :-------------------------------------- |
-| Data Package Identifier resolution           | [Data Package Identifier](https://frictionlessdata.io/specs/data-package-identifier/) | Identifier Strings only |
-| Remote and local resource path handling      | [Data Resource](https://frictionlessdata.io/specs/data-resource/), [Tabular Data Resource](https://frictionlessdata.io/specs/tabular-data-resource/) | Includes handling path arrays (i.e. data in multiple files)  |
-| Tabular Data Resource metadata handling      | [Tabular Data Resource](https://frictionlessdata.io/specs/tabular-data-resource/) | 'dialect' is partially handled. 'encoding' is handled for the most common encoding types**|
-| Table Schema type conversions                | [Table Schema](https://frictionlessdata.io/specs/table-schema/), [Tabular Data Resource](https://frictionlessdata.io/specs/tabular-data-resource/) | [Partial support](#table-schema-type-conversions). Includes resolving and applying remote schemas. |
-| Inline data handling                         | [Tabular Data Resource](https://frictionlessdata.io/specs/tabular-data-resource/) | |
-| Compressed resource handling                 | [Compression Resources Pattern (WIP)](https://github.com/frictionlessdata/specs/issues/290) | Gzip compression support only    |
+| Data Package Identifier resolution           | [Data Package Identifier](https://specs.frictionlessdata.io/data-package-identifier/) | Identifier Strings only |
+| Remote and local resource path handling      | [Data Resource](https://specs.frictionlessdata.io/data-resource/), [Tabular Data Resource](https://specs.frictionlessdata.io/tabular-data-resource/) | Includes handling path arrays (i.e. data in multiple files)  |
+| Tabular Data Resource metadata handling      | [Tabular Data Resource](https://specs.frictionlessdata.io/tabular-data-resource/) | 'dialect' is partially handled. 'encoding' is handled for the most common encoding types**|
+| Table Schema type conversions                | [Table Schema](https://specs.frictionlessdata.io/table-schema/), [Tabular Data Resource](https://specs.frictionlessdata.io/tabular-data-resource/) | [Partial support](#table-schema-type-conversions). Includes resolving and applying remote schemas. |
+| Inline data handling                         | [Tabular Data Resource](https://specs.frictionlessdata.io/tabular-data-resource/) | |
+| Compressed resource handling                 | [Compression Resources Pattern](https://specs.frictionlessdata.io//patterns/#compression-of-resources) | Gzip compression support only    |
 
 **The currently handled encoding types are gb2312, x-cp20949, euc-jp, iso-8859-1, iso-8859-2, iso-8859-3, iso-8859-4, iso-8859-5, iso-8859-6, iso-8859-7, iso-8859-8, iso-8859-9, iso-8859-13, iso-8859-15, us-ascii, utf-32be, utf-32, utf-16, utf-8, utf-7, and windows-1252.
 
@@ -122,7 +122,7 @@ The Data Package M functions are aligned closely with the v1 Frictionless Data s
 
 1. Download the [latest release](https://github.com/nimblelearn/datapackage-m/releases).
 2. Open the 'datapackage-m-template.pbit' file found in the 'templates' folder with Power BI Desktop.
-3. Open the Power Query Editor window and invoke the `DataPackageTable` or `DataPackageTables` function with a valid [Data Package Identifier String](https://frictionlessdata.io/specs/data-package-identifier/). Invoking the `DataPackageTable` function also requires a valid resource name or index.
+3. Open the Power Query Editor window and invoke the `DataPackageTable` or `DataPackageTables` function with a valid [Data Package Identifier String](https://specs.frictionlessdata.io/data-package-identifier/). Invoking the `DataPackageTable` function also requires a valid resource name or index.
 
 For instructions on how to open the Power Query Editor window in Power BI Desktop [click here](https://powerbi.microsoft.com/en-us/documentation/powerbi-desktop-query-overview/).
 
@@ -130,9 +130,9 @@ For instructions on how to open the Power Query Editor window in Power BI Deskto
 
 1. Download the [latest release](https://github.com/nimblelearn/datapackage-m/releases).
 2. Open the 'datapackage-m-template.xltx' file found in the 'templates' folder with Excel 2010 or later. For Excel 2010 and 2013, you MUST have the [Power Query for Excel](https://www.microsoft.com/en-gb/download/details.aspx?id=39379) add-in installed (installing the latest version is recommended). Power Query is built-in from with Excel 2016 and later, and can be found under the 'Data' tab in the 'Get & Transform Data' section.
-3. Open the Power Query Editor window and invoke the `DataPackageTable` or `DataPackageTables` function with a valid [Data Package Identifier String](https://frictionlessdata.io/specs/data-package-identifier/). Invoking the `DataPackageTable` function also requires a valid resource name or index.
+3. Open the Power Query Editor window and invoke the `DataPackageTable` or `DataPackageTables` function with a valid [Data Package Identifier String](https://specs.frictionlessdata.io/data-package-identifier/). Invoking the `DataPackageTable` function also requires a valid resource name or index.
 
-For instructions on how to open the Power Query Editor window in Excel [click here](https://support.office.com/en-gb/article/Introduction-to-the-Query-Editor-Power-Query-1d6cdb63-bf70-4ae8-a7d5-6ae9547004d9).
+For instructions on how to open the Power Query Editor window in Excel [click here](https://support.microsoft.com/en-us/office/create-power-query-formulas-in-excel-6bc50988-022b-4799-a709-f8aafdee2b2f).
 
 ### Option 3: Create New Functions from the Power Query M Files
 
@@ -278,20 +278,20 @@ let
 
 ## Licensing
 
-This work was created by [Nimble Learn](http://www.nimblelearn.com) and has been published with the MIT License. The full license can be viewed in [plain text](./LICENSE.txt).
+This work was created by [Nimble Learn](https://www.nimblelearn.com) and has been published with the MIT License. The full license can be viewed in [plain text](./LICENSE.txt).
 
 
 ## Notes
 
 * When prompted for the 'Privacy Level' by Power BI or Power Query for Excel, choose either 'Public' or 'Organizational'.
 
-* If the field values in a CSV file do not match the expected field type, as defined in the [Table Schema](https://frictionlessdata.io/specs/table-schema/), the invalid values in the column will return an error (Expression.Error). You can get around this by setting the `ignoreTableSchemaTypes` parameter to `true`.
+* If the field values in a CSV file do not match the expected field type, as defined in the [Table Schema](https://specs.frictionlessdata.io/table-schema/), the invalid values in the column will return an error (Expression.Error). You can get around this by setting the `ignoreTableSchemaTypes` parameter to `true`.
 
 
 ## Known Issues
 
 ### Power BI Service Data Refresh Support
 
-Data refresh only works from Power BI Desktop and Power Query for Excel but not from the Power BI service. The Power BI service performs a static analysis on all the Power Query M expressions in a Power BI file to determine whether it can be refreshed by the service. One scenario where a data refresh is not supported is when the [Web.Contents](https://msdn.microsoft.com/en-us/query-bi/m/web-contents?f=255&MSPPError=-2147217396) function is used with a [dynamically generated URL](https://ideas.powerbi.com/forums/265200-power-bi-ideas/suggestions/10927416-web-contents-should-support-scheduled-refresh-ev). This is one of the functions that Data Package M uses to dynamically handle Data Packages and this currently prevents the Power BI Service from being able to refresh the data.
+Data refresh only works from Power BI Desktop and Power Query for Excel but not from the Power BI service. The Power BI service performs a static analysis on all the Power Query M expressions in a Power BI file to determine whether it can be refreshed by the service. One scenario where a data refresh is not supported is when the [Web.Contents](https://docs.microsoft.com/en-gb/powerquery-m/web-contents) function is used with a [dynamically generated URL](https://ideas.powerbi.com/forums/265200-power-bi-ideas/suggestions/10927416-web-contents-should-support-scheduled-refresh-ev). This is one of the functions that Data Package M uses to dynamically handle Data Packages and this currently prevents the Power BI Service from being able to refresh the data.
 
-If you require Power BI service data refresh support, you can try the [Data Package Connector](https://github.com/nimblelearn/datapackage-connector). This is a [Power BI Custom Connector](https://docs.microsoft.com/en-us/power-bi/desktop-connector-extensibility) that's based on the same Data Package M functions and supports data refresh in the Power BI service through an [On-premises data gateway](https://docs.microsoft.com/en-us/power-bi/service-gateway-onprem).
+If you require Power BI service data refresh support, you can try the [Data Package Connector](https://github.com/nimblelearn/datapackage-connector). This is a [Power BI Custom Connector](https://docs.microsoft.com/en-us/power-bi/connect-data/desktop-connector-extensibility) that's based on the same Data Package M functions and supports data refresh in the Power BI service through an [On-premises data gateway](https://docs.microsoft.com/en-us/power-bi/connect-data/service-gateway-onprem).
